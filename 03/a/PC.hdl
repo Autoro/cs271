@@ -16,5 +16,21 @@ CHIP PC {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    // Various combinations of input switches for determining
+    // whether to load a new value or zero into the register,
+    // or load the next incremented value into the register.
+    Or(a=load, b=reset, out=loadOrReset);
+    Or(a=loadOrReset, b=inc, out=loadReg);
+
+    // Determines which input to load into the register next.
+    // Selects between the load value, zero, or the loopback/incremented value.
+    Mux16(a=in, b=false, sel=reset, out=loadValue);
+    Mux16(a=nextValue, b=loadValue, sel=loadOrReset, out=regIn);
+
+    // Passes either the current register output or the
+    // incremented version of it as the loopback value.
+    Inc16(in=currentOut, out=incOut);
+    Mux16(a=currentOut, b=incOut, sel=inc, out=nextValue);
+
+    Register(in=regIn, load=loadReg, out=currentOut, out=out);
 }
