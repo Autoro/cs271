@@ -13,53 +13,23 @@
     @R2
     M = 0
 
-// D = R0 - R1
+// Initialize loop count.
     @R0
     D = M
-    @R1
-    D = D - M
-
-    @SET_FIRST
-    D;JGT
-
-    @SET_SECOND
-    0;JMP
-
-// Use R0 as mutiplicand and R1 as multiplier.
-(SET_FIRST)
-    @R0
-    D = M
-    @multiplicand
-    M = D
-    @R1
-    D = M
-    @multiplier
-    M = D
-
-    @LOOP
-    0;JMP
-
-// Use R1 as multiplicand and R1 as multplier.
-(SET_SECOND)
-    @R1
-    D = M
-    @multiplicand
-    M = D
-    @R0
-    D = M
-    @multiplier
+    @i
     M = D
 
 (LOOP)
-    @multiplier
+    @i
     MD = M - 1
 
     @END
     D;JLT
 
+// Load Previous sum, then increment it by the multiplicand and save the new value.
     @R2
     D = M
-    @multiplicand
+    @R1
     D = D + M
     @R2
     M = D
