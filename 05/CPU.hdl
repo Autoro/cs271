@@ -39,5 +39,43 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-    // Put your code here:
+    // Determine whether or not the instruction is an A instrution or a C instruction.
+    // Then determine the input for the A register.
+    Not(in=instruction[15], out=aInstruction);
+    Mux16(a=aluOut, b=instruction, sel=aInstruction, out=aRegIn);
+
+    // If the instruction is a C instruction and the load D register bit is set, then
+    // update the D register.
+    And(a=instruction[15], b=instruction[4], out=dRegLoad);
+    DRegister(in=aluOut, load=dRegLoad, out=aluX);
+
+    // If the instruction is an A instruction or the load A register bit is set, then
+    // update the A register. Set the RAM address output to the output of the A register.
+    Or(a=aInstruction, b=instruction[5], out=aRegLoad);
+    ARegister(in=aRegIn, load=aRegLoad, out=aRegOut, out[0..14]=addressM);
+
+    // Select between the A register output and the RAM data input based on the
+    // "a" control bit.
+    Mux16(a=aRegOut, b=inM, sel=instruction[12], out=aluY);
+
+    // Run the ALU.
+    ALU(x=aluX, y=aluY, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=outM, out=aluOut, zr=zr, ng=ng);
+    Not(in=zr, out=notzr);
+    Not(in=ng, out=notng);
+
+    // If the instruction is a sit instruction and the update memory bit is set, then
+    // set the write memory output bit.
+    And(a=instruction[15], b=instruction[3], out=writeM);
+
+    // Select whether or not the current instruction is triggering a jump based on the
+    // zero and negative outputs of the ALU and the instruction jump bits.
+    And(a=notzr, b=notng, out=gt);
+    Or(a=zr, b=notng, out=gte);
+    Or(a=zr, b=ng, out=lte);
+    Mux8Way16(a[0]=false, b[0]=gt, c[0]=zr, d[0]=gte, e[0]=ng, f[0]=notzr, g[0]=lte, h[0]=true, sel=instruction[0..2], out[0]=jump);
+
+    // If the current instruction is triggering a jump, update the PC counter to the
+    // ouput of the A register.
+    And(a=jump, b=instruction[15], out=pcLoad);
+    PC(in=aRegOut, load=pcLoad, inc=true, reset=reset, out[0..14]=pc);
 }
