@@ -218,7 +218,7 @@ static inline dest_id str_to_destid(const char* s)
 
 static inline comp_id str_to_compid(const char* s, int* a)
 {
-    comp_id id = COMP_INVALID;
+    comp_id id;
     if (strcmp(s, "0") == 0)
     {
         id = COMP_0;
