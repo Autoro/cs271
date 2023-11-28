@@ -81,6 +81,8 @@ void parse(FILE* file)
             {
                 exit_program(EXIT_INVALID_A_INSTR, line_num, line);
             }
+
+            instr.itype = INSTR_A;
         }
         else if (is_label(line))
         {
@@ -202,7 +204,8 @@ void add_predefined_symbols()
 */
 bool parse_A_instruction(const char* line, a_instruction* instr)
 {
-    char* s = strdup(line);
+    // Duplicate line starting at one character passed the @ symbol.
+    char* s = strdup(line + 1);
     char* str_end = NULL;
     long result = strtol(s, &str_end, 10);
 

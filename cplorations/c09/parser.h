@@ -24,12 +24,12 @@
 typedef int16_t hack_addr;
 typedef int16_t opcode;
 
-enum instr_type
+typedef enum instr_type
 {
-    Invalid = -1,
-    A,
-    C
-};
+    INSTR_INVALID = -1,
+    INSTR_A,
+    INSTR_C
+} instr_type;
 
 typedef struct c_instruction
 {
@@ -56,6 +56,7 @@ typedef struct instruction
         a_instruction a;
         c_instruction c;
     } instr;
+    instr_type itype;
 } instruction;
 
 /** function prototypes **/
