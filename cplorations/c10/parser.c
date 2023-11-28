@@ -98,12 +98,12 @@ int parse(FILE* file, instruction* instructions)
 
             if (!isalpha(label[0]))
             {
-                exit_program(EXIT_INVALID_LABEL, line_num, line);
+                exit_program(EXIT_INVALID_LABEL, line_num, label);
             }
 
             if (symtable_find(label) != NULL)
             {
-                exit_program(EXIT_SYMBOL_ALREADY_EXISTS, line_num, line);
+                exit_program(EXIT_SYMBOL_ALREADY_EXISTS, line_num, label);
             }
 
             symtable_insert(label, instr_num);
