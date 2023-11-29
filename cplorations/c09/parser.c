@@ -212,7 +212,7 @@ bool parse_A_instruction(const char* line, a_instruction* instr)
     // A instruction is a label reference.
     if (s == str_end)
     {
-        instr->operand.label = strdup(line);
+        instr->operand.label = s;
         instr->is_addr = false;
     }
     // A instruction is invalid.
