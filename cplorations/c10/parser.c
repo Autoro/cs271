@@ -119,17 +119,17 @@ int parse(FILE* file, instruction* instructions)
 
             if (instr.instr.c.dest == DEST_INVALID)
             {
-                exit_program(EXIT_INVALID_C_DEST);
+                exit_program(EXIT_INVALID_C_DEST, line_num, line);
             }
 
             if (instr.instr.c.comp == COMP_INVALID)
             {
-                exit_program(EXIT_INVALID_C_COMP);
+                exit_program(EXIT_INVALID_C_COMP, line_num, line);
             }
 
             if (instr.instr.c.jump == JMP_INVALID)
             {
-                exit_program(EXIT_INVALID_C_JUMP);
+                exit_program(EXIT_INVALID_C_JUMP, line_num, line);
             }
 
             instr.itype = INSTR_C;
