@@ -338,6 +338,7 @@ void assemble(const char* file_name, instruction* instructions, int num_instruct
         fprintf(fout, "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n", OPCODE_TO_BINARY(op));
     }
     
+    free(fout_name);
     fclose(fout);
 }
 
